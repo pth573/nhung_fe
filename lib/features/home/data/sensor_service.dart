@@ -1,21 +1,21 @@
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hotel_app/common/network/dio_client.dart';
+import 'package:hotel_app/constants/api_url.dart';
 import 'package:hotel_app/core/base_response.dart';
+import 'package:hotel_app/features/home/model/sensor_data.dart';
 import 'package:hotel_app/models/example_model.dart';
 
 import '../../../di/injector.dart';
 
-final exampleService = Provider<ExampleService>((ref) => ExampleService());
+final sensorService = Provider<SensorService>((ref) => SensorService());
 
-class ExampleService {
-  Future<BaseResponse<List<ExampleModel>>> getExample() async {
+class SensorService {
+  Future<BaseResponse<SensorData>> getSensorData() async {
     try {
-      Response data = await injector<DioClient>().get('https://jsonplaceholder.typicode.com/posts');
-      final dataList = (data.data as List)
-          .map((json) => ExampleModel.fromJson(json)).toList();
-      return BaseResponse(isSuccessful: true, sucessfulData: dataList);
+      Response json = await injector<DioClient>().get("/current-sensor-data");
+      final SensorData data = SensorData.fromJson(json.data);
+      return BaseResponse(isSuccessful: true, sucessfulData: data);
 
     } on DioException catch (e) {
       final errorMessage = e.response?.data['message'] ?? "Lỗi không xác định";

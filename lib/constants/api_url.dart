@@ -1,3 +1,3 @@
 class ApiUrl {
-  static const String baseURL = 'https://jsonplaceholder.typicode.com';
+  static const String baseURL = 'http://192.168.1.7:8000/api';
 }

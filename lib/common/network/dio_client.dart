@@ -13,7 +13,7 @@ class DioClient {
           'Content-Type': 'application/json; charset=UTF-8'
         },
         responseType: ResponseType.json,
-        sendTimeout: const Duration(seconds: 10),
+        sendTimeout: const Duration(seconds: 5),
         receiveTimeout: const Duration(seconds: 10)
     ),
   )..interceptors.addAll([AuthorizationInterceptor(),LoggerInterceptor()]);

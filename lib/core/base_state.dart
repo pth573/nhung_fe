@@ -21,7 +21,7 @@ class BaseState<T> {
   final String? message;
 
   const BaseState({
-    required this.status,
+    this.status = BaseStatus.none,
     this.data,
     this.message,
   });
