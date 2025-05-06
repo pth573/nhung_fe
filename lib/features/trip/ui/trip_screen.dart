@@ -9,6 +9,7 @@ import 'package:hotel_app/widgets/error_widget.dart';
 
 import '../../../common/utils/location_util.dart';
 import '../model/trip.dart';
+import 'package:geocoding/geocoding.dart';
 
 class TripScreen extends ConsumerWidget {
   const TripScreen({super.key});
@@ -124,16 +125,134 @@ class _TripListWidgetState extends ConsumerState<TripListWidget> {
   }
 }
 
-class TripItem extends StatelessWidget {
+
+Future<String> getAddressFromCoordinates(double latitude, double longitude) async {
+  try {
+    List<Placemark> placemarks = await placemarkFromCoordinates(latitude, longitude);
+    if (placemarks.isNotEmpty) {
+      final place = placemarks.first;
+      return '${place.street}, ${place.locality}, ${place.administrativeArea}, ${place.country}';
+    }
+    return 'Không rõ địa điểm';
+  } catch (e) {
+    return 'Lỗi lấy địa điểm';
+  }
+}
+//
+//
+// class TripItem extends StatelessWidget {
+//   final Trip trip;
+//
+//   const TripItem({
+//     super.key,
+//     required this.trip,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Material(
+//       borderRadius: BorderRadius.circular(12),
+//       elevation: 2,
+//       color: Colors.white,
+//       child: InkWell(
+//         borderRadius: BorderRadius.circular(12),
+//         onTap: () {},
+//         child: Ink(
+//           padding: const EdgeInsets.all(16),
+//           decoration: BoxDecoration(
+//             color: Colors.white,
+//           ),
+//           child: Column(
+//             crossAxisAlignment: CrossAxisAlignment.start,
+//             children: [
+//               Text(
+//                 'Bắt đầu: ${trip.startRoute.latitude} ${trip.startRoute.location} ${trip.startRoute.longitude} ',
+//                 style: const TextStyle(
+//                   fontSize: 15,
+//                   fontWeight: FontWeight.w500,
+//                   color: Color(0xFF555555),
+//                 ),
+//               ),
+//               const SizedBox(height: 6),
+//               Text(
+//                 'Kết thúc: '
+//                     '${trip.endRoute?.latitude ?? ''} '
+//                     '${trip.endRoute?.location ?? ''} '
+//                     '${trip.endRoute?.longitude ?? ''}',
+//                 style: const TextStyle(
+//                   fontSize: 15,
+//                   fontWeight: FontWeight.w500,
+//                   color: Color(0xFF555555),
+//                 ),
+//               ),
+//               const SizedBox(height: 10),
+//               Text(
+//                 trip.distance != null
+//                     ? 'Khoảng cách: ${trip.distance} km'
+//                     : 'Khoảng cách: -',
+//                 style: const TextStyle(
+//                   fontSize: 16,
+//                   fontWeight: FontWeight.w500,
+//                   color: Colors.black87,
+//                 ),
+//                 overflow: TextOverflow.ellipsis,
+//               ),
+//               Text(
+//                 trip.duration != null
+//                     ? 'Thời gian: ${trip.duration}'
+//                     : 'Thời gian: -',
+//                 style: const TextStyle(
+//                   fontSize: 16,
+//                   fontWeight: FontWeight.w500,
+//                   color: Colors.black87,
+//                 ),
+//                 overflow: TextOverflow.ellipsis,
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+class TripItem extends StatefulWidget {
   final Trip trip;
 
-  const TripItem({
-    super.key,
-    required this.trip,
-  });
+  const TripItem({super.key, required this.trip});
+
+  @override
+  State<TripItem> createState() => _TripItemState();
+}
+
+class _TripItemState extends State<TripItem> {
+  String startAddress = '';
+  String endAddress = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAddresses();
+  }
+
+  Future<void> _loadAddresses() async {
+    final start = await getAddressFromCoordinates(
+        widget.trip.startRoute.latitude, widget.trip.startRoute.longitude);
+    final end = widget.trip.endRoute != null
+        ? await getAddressFromCoordinates(
+        widget.trip.endRoute!.latitude, widget.trip.endRoute!.longitude)
+        : '';
+
+    setState(() {
+      startAddress = start;
+      endAddress = end;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final trip = widget.trip;
+
     return Material(
       borderRadius: BorderRadius.circular(12),
       elevation: 2,
@@ -143,50 +262,28 @@ class TripItem extends StatelessWidget {
         onTap: () {},
         child: Ink(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
+          decoration: const BoxDecoration(color: Colors.white),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Bắt đầu: ${trip.startRoute.location}',
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF555555),
-                ),
+                'Bắt đầu: $startAddress',
+                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Color(0xFF555555)),
               ),
               const SizedBox(height: 6),
               Text(
-                'Kết thúc: ${trip.endRoute?.location}',
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF555555),
-                ),
+                'Kết thúc: $endAddress',
+                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Color(0xFF555555)),
               ),
               const SizedBox(height: 10),
               Text(
-                trip.distance != null
-                    ? 'Khoảng cách: ${trip.distance} km'
-                    : 'Khoảng cách: -',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
+                trip.distance != null ? 'Khoảng cách: ${trip.distance} km' : 'Khoảng cách: -',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                trip.duration != null
-                    ? 'Thời gian: ${trip.duration}'
-                    : 'Thời gian: -',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
+                trip.duration != null ? 'Thời gian: ${trip.duration}' : 'Thời gian: -',
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -196,7 +293,6 @@ class TripItem extends StatelessWidget {
     );
   }
 }
-
 
 
 class TripHeaderWidget extends ConsumerStatefulWidget {

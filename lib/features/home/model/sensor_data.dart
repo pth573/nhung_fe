@@ -56,4 +56,16 @@ class SensorData {
       'timestamp': timestamp,
     };
   }
+
+  @override
+  String toString() {
+    return 'SensorData('
+        'timestamp: $timestamp, '
+        'latitude: $latitude, longitude: $longitude, '
+        'AccX: $accX, AccY: $accY, AccZ: $accZ, '
+        'GyroX: $gyroX, GyroY: $gyroY, GyroZ: $gyroZ, '
+        'temperature: $temperature, vibrationDetected: $vibrationDetected'
+        ')';
+  }
+
 }

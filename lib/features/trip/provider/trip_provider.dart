@@ -33,6 +33,9 @@ class TripProvider extends AutoDisposeNotifier<SearchData<Trip>> {
         query: state.query,
       );
 
+      print("OKKKK2123");
+      print(response);
+      
       if (response.isSuccessful) {
         final List<Trip> alerts = response.sucessfulData!;
 

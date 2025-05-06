@@ -77,7 +77,7 @@ class _TrackingSystemBarState extends ConsumerState<TrackingSystemBar> {
                   context: context,
                   builder: (BuildContext context) {
                     return CustomDialog(
-                      content: 'Bạn có muốn kết thúc chuyen đi không?',
+                      content: 'Bạn có muốn kết thúc chuyến đi không?',
                       title: 'Xác nhận',
                       leftTitle: "Hủy",
                       rightTitle: 'Kết thúc',

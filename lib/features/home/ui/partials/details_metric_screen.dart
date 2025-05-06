@@ -17,6 +17,7 @@ class _DetailsMetricScreenState extends ConsumerState<DetailsMetricScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("decodedMessage00");
     final sensorList = ref.watch(sensorListProvider);
     final lastSensorData = sensorList.isNotEmpty ? sensorList.last : null;
 

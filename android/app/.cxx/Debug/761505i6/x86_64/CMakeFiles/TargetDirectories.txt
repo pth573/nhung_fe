@@ -1,0 +1,2 @@
+C:/Tuiii/HoctapMain/Tailieu/KI2_N4/XDHTN/code/embedded_system_app/android/app/.cxx/Debug/761505i6/x86_64/CMakeFiles/edit_cache.dir
+C:/Tuiii/HoctapMain/Tailieu/KI2_N4/XDHTN/code/embedded_system_app/android/app/.cxx/Debug/761505i6/x86_64/CMakeFiles/rebuild_cache.dir
