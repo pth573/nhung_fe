@@ -135,9 +135,11 @@ Future<String> getAddressFromCoordinates(double latitude, double longitude) asyn
     }
     return 'Không rõ địa điểm';
   } catch (e) {
-    return 'Lỗi lấy địa điểm';
+    // Return '0 - 0' in case of error
+    return '0 - 0';
   }
 }
+
 //
 //
 // class TripItem extends StatelessWidget {
