@@ -78,6 +78,7 @@
 
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hotel_app/constants/api_url.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:hotel_app/core/base_response.dart';
 import 'package:hotel_app/features/home/model/sensor_data.dart';
@@ -86,7 +87,7 @@ final sensorService = Provider<SensorService>((ref) => SensorService());
 
 class SensorService {
   final WebSocketChannel channel = WebSocketChannel.connect(
-    Uri.parse('ws://172.28.160.1:8000/ws/current-sensor-data/'),
+    Uri.parse('ws://${ApiUrl.IP}/ws/current-sensor-data/'),
   );
 
   Stream<BaseResponse<SensorData>> getSensorData() async* {

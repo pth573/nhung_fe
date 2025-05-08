@@ -1,8 +1,9 @@
 import 'dart:convert';
+import 'package:hotel_app/constants/api_url.dart';
 import 'package:hotel_app/features/home/model/sensor_data.dart';
 import 'package:http/http.dart' as http;
 Future<void> sendSensorData() async {
-  final url = Uri.parse('http://172.28.160.1:8000/api/receive-data/');
+  final url = Uri.parse('${ApiUrl.baseURL}/api/receive-data/');
 
   final Map<String, dynamic> body = {
     "timestamp": "0", // Set timestamp as '0' or any appropriate value
